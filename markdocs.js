@@ -72,7 +72,7 @@ function markdocs (markdown) {
                 subsection += 1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<span id="${obj.sub.toLowerCase().replaceAll(" ", "")}"></span>#### ${section}.${subsection}&emsp;${obj.sub}`
+                    `<span id="${obj.sub.toLowerCase().replaceAll(" ", "")}"></span>\n#### ${section}.${subsection}&emsp;${obj.sub}`
                 )
             }
             if (obj.hasOwnProperty("cite")) {
