@@ -65,7 +65,7 @@ function markdocs (markdown) {
                 subsection = 0
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<span id="${obj.sec.toLowerCase().replaceAll(" ", "")}"></span>**Chapter ${section}**<br>${obj.sec}\n---`
+                    `<span id="${obj.sec.toLowerCase().replaceAll(" ", "")}"></span>${section}&emsp;${obj.sec}\n---`
                 )
             }
             if (obj.hasOwnProperty("sub")) {
