@@ -277,6 +277,7 @@ async function read(input) {
     window.input = await Promise.all(Array.from(input.files).map(async (file) => {
         return await readFile(file)
     }))
+    /*
     document.getElementById('files').innerHTML = ""
     Array.from(input.files).map(file => file.name.replace(".md", "")).forEach((filename, index) => {
         var fileitem = document.createElement("div")
@@ -302,6 +303,7 @@ async function read(input) {
         fileitem.append(fileflex)
         document.getElementById('files').append(fileitem)
     })
+    */
     document.getElementById('sample').classList.remove('disabled')
     document.getElementById('sample').classList.remove('btn-secondary')
     document.getElementById('sample').classList.add('btn-primary')
