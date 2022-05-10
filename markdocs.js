@@ -103,7 +103,7 @@ function markdocs (markdown) {
             if (obj.hasOwnProperty("bib")) {
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<span id="${obj.bib}"></span>${obj.authors.join(" and ")} (${obj.year}). _${obj.title}_. ${obj.publisher}. [${obj.url}](${obj.url}).`
+                    `<span id="${obj.bib}"></span><p align="left">${obj.authors.join(" and ")} (${obj.year}). _${obj.title}_. ${obj.publisher}. <a href="${obj.url}">${obj.url}</a>.</p>`
                 )
             }
             if (obj.hasOwnProperty("fig")) {
