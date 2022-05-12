@@ -6,9 +6,11 @@ function markdocs (markdown) {
         const parsed = brackets.map(obj => JSON.parse(obj))
         const bibliography = parsed.filter(obj => obj.hasOwnProperty("bib"))
         const figures = parsed.filter(obj => obj.hasOwnProperty("fig"))
-        const contents = parsed.filter(obj => obj.hasOwnProperty("sec") || obj.hasOwnProperty("sub"))
-        var section;
-        var subsection = 0
+        const contents = parsed.filter(obj => obj.hasOwnProperty("chp") || obj.hasOwnProperty("sec"))
+        const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+        var chapter;
+        var section = 0
+        var subsection = -1
 
         parsed.forEach(obj => {
 
@@ -39,16 +41,16 @@ function markdocs (markdown) {
 
             if (obj.hasOwnProperty("toc")) {
 
-                if (obj.toc == "sec-sub") {
+                if (obj.toc == "chp-sec") {
                     const table = contents.map(obj => {
-                        if (obj.hasOwnProperty("sec")) {
-                            section = contents.filter(obj => obj.hasOwnProperty("sec")).indexOf(obj) + 1
-                            subsection = 0
-                            return `\n[${section}&emsp;${obj.sec}](#${obj.sec.toLowerCase().replaceAll(" ", "")})`
+                        if (obj.hasOwnProperty("chp")) {
+                            chapter = contents.filter(obj => obj.hasOwnProperty("chp")).indexOf(obj) + 1
+                            section = 0
+                            return `\n[${chapter}&emsp;${obj.chp}](#${obj.chp.toLowerCase().replaceAll(" ", "")})`
                         }
-                        if (obj.hasOwnProperty("sub")) {
-                            subsection += 1
-                            return `${subsection == 1 ? "\n" : ""}&emsp;[${section}.${subsection}&emsp;${obj.sub}](#${obj.sub.toLowerCase().replaceAll(" ", "")})`
+                        if (obj.hasOwnProperty("sec")) {
+                            section += 1
+                            return `${section == 1 ? "\n" : ""}&emsp;[${chapter}.${section}&emsp;${obj.sec}](#${obj.sec.toLowerCase().replaceAll(" ", "")})`
                         }
                     })
                     markdown = markdown.replace(
@@ -57,10 +59,10 @@ function markdocs (markdown) {
                     )
                 }
 
-                if (obj.toc == "sec") {
-                    const table = contents.filter(obj => obj.hasOwnProperty("sec")).map(obj => {
-                        section = contents.filter(obj => obj.hasOwnProperty("sec")).indexOf(obj) + 1
-                        return `\n[${section}&emsp;${obj.sec}](#${obj.sec.toLowerCase().replaceAll(" ", "")})`
+                if (obj.toc == "chp") {
+                    const table = contents.filter(obj => obj.hasOwnProperty("chp")).map(obj => {
+                        chapter = contents.filter(obj => obj.hasOwnProperty("chp")).indexOf(obj) + 1
+                        return `\n[${chapter}&emsp;${obj.chp}](#${obj.chp.toLowerCase().replaceAll(" ", "")})`
                     })
                     markdown = markdown.replace(
                         JSON.stringify(obj),
@@ -70,12 +72,21 @@ function markdocs (markdown) {
 
             }
 
-            if (obj.hasOwnProperty("sec")) {
-                section = contents.filter(obj => obj.hasOwnProperty("sec")).indexOf(obj) + 1
-                subsection = 0
+            if (obj.hasOwnProperty("chp")) {
+                chapter = contents.filter(obj => obj.hasOwnProperty("chp")).indexOf(obj) + 1
+                section = 0
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<span id="${obj.sec.toLowerCase().replaceAll(" ", "")}"></span>Chapter ${section}\n<br>\n<h1>${obj.sec}</h1>\n<br>`
+                    `<span id="${obj.chp.toLowerCase().replaceAll(" ", "")}"></span>Chapter ${chapter}\n<br>\n<h1>${obj.chp}</h1>\n<br>`
+                )
+            }
+
+            if (obj.hasOwnProperty("sec")) {
+                section += 1
+                subsection = -1
+                markdown = markdown.replace(
+                    JSON.stringify(obj),
+                    `<span id="${obj.sec.toLowerCase().replaceAll(" ", "")}"></span>\n\n#### ${chapter}.${section}&emsp;${obj.sec}`
                 )
             }
 
@@ -83,7 +94,7 @@ function markdocs (markdown) {
                 subsection += 1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<span id="${obj.sub.toLowerCase().replaceAll(" ", "")}"></span>\n\n#### ${section}.${subsection}&emsp;${obj.sub}`
+                    `*${alphabet[subsection]}.&emsp;${obj.sub}*`
                 )
             }
 
@@ -108,10 +119,10 @@ function markdocs (markdown) {
 
             if (obj.hasOwnProperty("ref")) {
                 const figure = figures.filter(fig => fig.fig == obj.ref)[0]
-                const section = figures.indexOf(figure) + 1
+                const chapter = figures.indexOf(figure) + 1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `[figure ${section}](#${figure.fig})`
+                    `[figure ${chapter}](#${figure.fig})`
                 )
             }
 
@@ -123,10 +134,10 @@ function markdocs (markdown) {
             }
 
             if (obj.hasOwnProperty("fig")) {
-                const section = figures.map(fig => fig.fig).indexOf(obj.fig) + 1
+                const chapter = figures.map(fig => fig.fig).indexOf(obj.fig) + 1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `<br>\n\n<span id="${obj.fig}"></span><img style="width:${obj.width}" src="${obj.url}"/>\n\nFigure ${section}: ${obj.caption}\n\n<br>`
+                    `<br>\n\n<span id="${obj.fig}"></span><img style="width:${obj.width}" src="${obj.url}"/>\n\nFigure ${chapter}: ${obj.caption}\n\n<br>`
                 )
             }
 

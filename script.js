@@ -66,21 +66,28 @@ function render() {
     var docstocitem = document.createElement("div")
     docstocitem.classList.add("list-group-item")
     var docstoccode = document.createElement("code")
-    docstoccode.innerHTML = '{"toc":"sec-sub"} {"toc":"sec"}'
+    docstoccode.innerHTML = '{"toc":"cph-sec"} {"toc":"cph"}'
     docstocitem.append(docstoccode)
     docstocgroup.append(docstocitem)
+
+    var docscphitem = document.createElement("div")
+    docscphitem.classList.add("list-group-item")
+    var docscphcode = document.createElement("code")
+    docscphcode.innerHTML = '{"cph":"Chapter 1 Introduction"}'
+    docscphitem.append(docscphcode)
+    docstocgroup.append(docscphitem)
 
     var docssecitem = document.createElement("div")
     docssecitem.classList.add("list-group-item")
     var docsseccode = document.createElement("code")
-    docsseccode.innerHTML = '{"sec":"Introduction"}'
+    docsseccode.innerHTML = '{"sec":"1.1 Motivation"}'
     docssecitem.append(docsseccode)
     docstocgroup.append(docssecitem)
 
     var docssubitem = document.createElement("div")
     docssubitem.classList.add("list-group-item")
     var docssubcode = document.createElement("code")
-    docssubcode.innerHTML = '{"sub":"Motivation"}'
+    docssubcode.innerHTML = '{"sub":"a.&emspReasoning"}'
     docssubitem.append(docssubcode)
     docstocgroup.append(docssubitem)
 
