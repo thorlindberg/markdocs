@@ -14,6 +14,13 @@ function markdocs (markdown) {
 
         parsed.forEach(obj => {
 
+            if (obj.hasOwnProperty("break")) {
+                markdown = markdown.replace(
+                    JSON.stringify(obj),
+                    "<br><div style='page-break-after:always'></div>"
+                )
+            }
+
             if (obj.hasOwnProperty("date")) {
 
                 if (obj.date == "m-d-y") {
@@ -119,32 +126,32 @@ function markdocs (markdown) {
 
             if (obj.hasOwnProperty("ref")) {
                 const figure = figures.filter(fig => fig.fig == obj.ref)[0]
-                const chapter = figures.indexOf(figure) + 1
+                const count = figures.indexOf(figure) + 1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    `[figure ${chapter}](#${figure.fig})`
+                    `[figure ${count}](#${figure.fig})`
                 )
+            }
+
+            if (obj.hasOwnProperty("fig")) {
+                const count = figures.map(fig => fig.fig).indexOf(obj.fig) + 1
+                if (obj.hasOwnProperty("url")) {
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        `<br>\n\n<span id="${obj.fig}"></span><img style="width:${obj.width}" src="${obj.url}"/>\n\nFigure ${count}: ${obj.caption}\n\n<br>`
+                    )
+                } else {
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        `<br>\n\n<span id="${obj.fig}"></span>\nFigure ${count}: ${obj.caption}\n\n<br>`
+                    )
+                }
             }
 
             if (obj.hasOwnProperty("bib")) {
                 markdown = markdown.replace(
                     JSON.stringify(obj),
                     `<span id="${obj.bib}"></span><p align="left">${obj.authors.join(" and ")} (${obj.year}). _${obj.title}_. ${obj.publisher}. <a href="${obj.url}">${obj.url}</a>.</p>`
-                )
-            }
-
-            if (obj.hasOwnProperty("fig")) {
-                const chapter = figures.map(fig => fig.fig).indexOf(obj.fig) + 1
-                markdown = markdown.replace(
-                    JSON.stringify(obj),
-                    `<br>\n\n<span id="${obj.fig}"></span><img style="width:${obj.width}" src="${obj.url}"/>\n\nFigure ${chapter}: ${obj.caption}\n\n<br>`
-                )
-            }
-
-            if (obj.hasOwnProperty("break")) {
-                markdown = markdown.replace(
-                    JSON.stringify(obj),
-                    "<br><div style='page-break-after:always'></div>"
                 )
             }
 
