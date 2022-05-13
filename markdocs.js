@@ -6,9 +6,10 @@ function markdocs (markdown) {
         const parsed = brackets.map(obj => JSON.parse(obj))
         const bibliography = parsed.filter(obj => obj.hasOwnProperty("bib"))
         const figures = parsed.filter(obj => obj.hasOwnProperty("fig"))
+        const tables = parsed.filter(obj => obj.hasOwnProperty("tbl"))
         const contents = parsed.filter(obj => obj.hasOwnProperty("chp") || obj.hasOwnProperty("sec"))
         const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-        var chapter;
+        var chapter
         var section = 0
         var subsection = -1
 
@@ -125,12 +126,22 @@ function markdocs (markdown) {
             }
 
             if (obj.hasOwnProperty("ref")) {
-                const figure = figures.filter(fig => fig.fig == obj.ref)[0]
-                const count = figures.indexOf(figure) + 1
-                markdown = markdown.replace(
-                    JSON.stringify(obj),
-                    `[figure ${count}](#${figure.fig})`
-                )
+                if (figures.map(fig => fig.fig).includes(obj.ref)) {
+                    target = figures.filter(fig => fig.fig == obj.ref)[0]
+                    count = figures.indexOf(target) + 1
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        `[${count}](#${target.fig})`
+                    )
+                }
+                if (tables.map(tbl => tbl.tbl).includes(obj.ref)) {
+                    target = tables.filter(tbl => tbl.tbl == obj.ref)[0]
+                    count = tables.indexOf(target) + 1
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        `[${count}](#${target.tbl})`
+                    )
+                }
             }
 
             if (obj.hasOwnProperty("fig")) {
@@ -146,6 +157,14 @@ function markdocs (markdown) {
                         `<br>\n\n<span id="${obj.fig}"></span>\nFigure ${count}: ${obj.caption}\n\n<br>`
                     )
                 }
+            }
+
+            if (obj.hasOwnProperty("tbl")) {
+                const count = tables.map(tbl => tbl.tbl).indexOf(obj.tbl) + 1
+                markdown = markdown.replace(
+                    JSON.stringify(obj),
+                    `<br>\n\n<span id="${obj.tbl}"></span>\nTable ${count}: ${obj.caption}\n\n<br>`
+                )
             }
 
             if (obj.hasOwnProperty("bib")) {
