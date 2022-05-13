@@ -174,6 +174,21 @@ function markdocs (markdown) {
                 )
             }
 
+            if (obj.hasOwnProperty("count")) {
+                if (obj.count == "char") {
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        markdown.length
+                    )
+                }
+                if (obj.count == "word") {
+                    markdown = markdown.replace(
+                        JSON.stringify(obj),
+                        markdown.split(" ").length
+                    )
+                }
+            }
+
         })
 
     }
