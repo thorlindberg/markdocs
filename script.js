@@ -284,51 +284,12 @@ async function read(input) {
     window.input = await Promise.all(Array.from(input.files).map(async (file) => {
         return await readFile(file)
     }))
-    /*
-    document.getElementById('files').innerHTML = ""
-    Array.from(input.files).map(file => file.name.replace(".md", "")).forEach((filename, index) => {
-        var fileitem = document.createElement("div")
-        fileitem.classList.add("list-group-item")
-        var fileflex = document.createElement("div")
-        fileflex.classList.add("d-flex")
-        fileflex.classList.add("justify-content-between")
-        var left = document.createElement("div")
-        left.innerHTML = filename
-        var right = document.createElement("div")
-        try {
-            if (window.input[index].replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g) != undefined) {
-                window.input[index].replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g).map(obj => JSON.parse(obj))
-            }
-            right.style.color = "rgb(180, 180, 180)"
-            right.innerHTML = ".md"
-        } catch (e) {
-            right.style.color = "rgb(248, 114, 114)"
-            right.innerHTML = "regex error"
-        }
-        fileflex.append(left)
-        fileflex.append(right)
-        fileitem.append(fileflex)
-        document.getElementById('files').append(fileitem)
-    })
-    */
     document.getElementById('sample').classList.remove('disabled')
     document.getElementById('sample').classList.remove('btn-secondary')
     document.getElementById('sample').classList.add('btn-primary')
-    const validated = window.input.map(content => {
-        try {
-            if (content.replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g) != undefined) {
-                content.replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g).map(obj => JSON.parse(obj))
-            }
-            return true
-        } catch (e) {
-            return false
-        }
-    })
-    if (validated.every(n => n == true)) {
-        document.getElementById('convert').classList.remove('disabled')
-        document.getElementById('convert').classList.remove('btn-secondary')
-        document.getElementById('convert').classList.add('btn-primary')
-    }
+    document.getElementById('convert').classList.remove('disabled')
+    document.getElementById('convert').classList.remove('btn-secondary')
+    document.getElementById('convert').classList.add('btn-primary')
     window.input = window.input.join('\n\n')
 }
 

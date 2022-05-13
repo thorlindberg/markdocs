@@ -1,6 +1,18 @@
 function markdocs (markdown) {
 
-    const brackets = markdown.replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g)
+    var including = true
+    const excludingUML = markdown.split("\n").filter( n => {
+        if (n.includes("@startuml")) {
+            including = false
+        }
+        if (n.includes("@enduml")) {
+            including = true
+            return false
+        }
+        return including
+    }).join("\n")
+    
+    const brackets = excludingUML.replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g)
     if (brackets != undefined) {
 
         const parsed = brackets.map(obj => JSON.parse(obj))
