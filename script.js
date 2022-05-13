@@ -87,7 +87,7 @@ function render() {
     var docssubitem = document.createElement("div")
     docssubitem.classList.add("list-group-item")
     var docssubcode = document.createElement("code")
-    docssubcode.innerHTML = '{"sub":"a.&emspReasoning"}'
+    docssubcode.innerHTML = '{"sub":"a. Reasoning"}'
     docssubitem.append(docssubcode)
     docstocgroup.append(docssubitem)
 
