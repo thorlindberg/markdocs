@@ -23,6 +23,13 @@ function markdocs (markdown) {
         }
         return including
     }).join("\n")
+
+    const excludingUMLTableHTML = excludingUMLTable.split("\n").filter( n => {
+        if (n.includes("<") && n.includes(">")) {
+            return false
+        }
+        return true
+    }).join("\n")
     
     const brackets = excludingUML.replaceAll(/```([\s\S]*?)```/g, "").match(/{([^}]+)}/g)
     if (brackets != undefined) {
@@ -202,13 +209,13 @@ function markdocs (markdown) {
                 if (obj.count == "char") {
                     markdown = markdown.replace(
                         JSON.stringify(obj),
-                        excludingUMLTable.replaceAll(/```([\s\S]*?)```/g, "").length
+                        excludingUMLTableHTML.replaceAll(/```([\s\S]*?)```/g, "").length
                     )
                 }
                 if (obj.count == "word") {
                     markdown = markdown.replace(
                         JSON.stringify(obj),
-                        excludingUMLTable.replaceAll(/```([\s\S]*?)```/g, "").split(" ").length
+                        excludingUMLTableHTML.replaceAll(/```([\s\S]*?)```/g, "").split(" ").length
                     )
                 }
             }
