@@ -114,6 +114,7 @@ function markdocs (markdown) {
             if (obj.hasOwnProperty("chp")) {
                 chapter = contents.filter(obj => obj.hasOwnProperty("chp")).indexOf(obj) + 1
                 section = 0
+                subsection = -1
                 markdown = markdown.replace(
                     JSON.stringify(obj),
                     `<span id="${obj.chp.toLowerCase().replaceAll(" ", "")}"></span>Chapter ${chapter}\n<br>\n<h1>${obj.chp}</h1>\n<br>`
