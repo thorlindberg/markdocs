@@ -49,7 +49,7 @@ function markdocs (markdown) {
             if (obj.hasOwnProperty("break")) {
                 markdown = markdown.replace(
                     JSON.stringify(obj),
-                    "<br><div style='page-break-after:always'></div>"
+                    "<div style='page-break-after:always'></div>"
                 )
             }
 
